@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Send,
@@ -34,7 +34,7 @@ import {
 
 const COLORS = ["#06b6d4", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
 
-export default function ChatPage() {
+function ChatContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
 
@@ -294,6 +294,21 @@ export default function ChatPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col h-[calc(100vh-6rem)] items-center justify-center space-y-4 text-slate-400">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
+          <p className="text-sm">Loading workspace...</p>
+        </div>
+      }
+    >
+      <ChatContent />
+    </Suspense>
   );
 }
 
