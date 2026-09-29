@@ -1,11 +1,15 @@
-from passlib.context import CryptContext
+import hashlib
+import os
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+SECRET_SALT = "finai_nexus_salt_2026"
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    """Generates SHA-256 salted hash for user passwords."""
+    salted = f"{SECRET_SALT}:{password}"
+    return hashlib.sha256(salted.encode("utf-8")).hexdigest()
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verifies plain password against hashed password."""
+    return get_password_hash(plain_password) == hashed_password

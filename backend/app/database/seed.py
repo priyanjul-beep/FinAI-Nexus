@@ -2,19 +2,13 @@ import os
 import uuid
 import datetime
 import random
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from backend.app.database.session import SessionLocal, engine
+from backend.app.auth.security import get_password_hash
 from backend.app.models.domain import (
     Base, User, Product, Region, Customer, PricingRule, InterchangeRate,
     Transaction, PromptVersion, Document, DocumentChunk
 )
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
 
 
 def seed_database():
@@ -33,7 +27,7 @@ def seed_database():
         admin_user = User(
             id=str(uuid.uuid4()),
             email="admin@finai-nexus.io",
-            hashed_password=hash_password("admin123"),
+            hashed_password=get_password_hash("admin123"),
             full_name="Admin Director",
             role="ADMIN",
             is_active=True
@@ -41,7 +35,7 @@ def seed_database():
         analyst_user = User(
             id=str(uuid.uuid4()),
             email="analyst@finai-nexus.io",
-            hashed_password=hash_password("analyst123"),
+            hashed_password=get_password_hash("analyst123"),
             full_name="Senior Pricing Analyst",
             role="ANALYST",
             is_active=True
@@ -49,7 +43,7 @@ def seed_database():
         viewer_user = User(
             id=str(uuid.uuid4()),
             email="viewer@finai-nexus.io",
-            hashed_password=hash_password("viewer123"),
+            hashed_password=get_password_hash("viewer123"),
             full_name="Executive Viewer",
             role="VIEWER",
             is_active=True
@@ -117,7 +111,7 @@ def seed_database():
         ]
         db.add_all(ic_rates)
 
-        # 7. Transactions (Generate 200+ realistic transaction records across Q1/Q2 2026)
+        # 7. Transactions (Generate 250 realistic transactions)
         base_date = datetime.datetime(2026, 1, 1)
         prod_codes = ["PRD_CREDIT_PREM", "PRD_DEBIT_INST", "PRD_XBORDER_PAY", "PRD_COMMERCIAL_CARD", "PRD_RECURRING_BILL"]
         countries = {"US": "United States", "EU": "Germany", "APAC_IN": "India", "APAC_SG": "Singapore", "LATAM_BR": "Brazil"}
@@ -134,7 +128,7 @@ def seed_database():
             # Pricing & Interchange logic
             if p_code == "PRD_CREDIT_PREM":
                 ic_pct = 1.65
-                pr_pct = random.choice([1.95, 1.90, 2.10, 1.70])  # Note 1.70 is below recommended 1.85! Violations for agent to detect!
+                pr_pct = random.choice([1.95, 1.90, 2.10, 1.70])  # Note 1.70 is below recommended 1.85!
             elif p_code == "PRD_DEBIT_INST":
                 ic_pct = 0.25
                 pr_pct = random.choice([0.55, 0.50, 0.60, 0.40])
