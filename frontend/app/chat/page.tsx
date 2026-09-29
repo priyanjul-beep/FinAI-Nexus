@@ -58,7 +58,7 @@ export default function ChatPage() {
     if (!queryText) setInputQuery("");
     setLoading(true);
 
-    try:
+    try{
       // Connect to FastAPI backend
       const res = await fetch("http://localhost:8000/api/v1/chat", {
         method: "POST",
@@ -298,7 +298,7 @@ export default function ChatPage() {
 }
 
 // Fallback mock builder if offline
-function generateMockChatResponse(query: str) {
+function generateMockChatResponse(query: string) {
   return {
     run_id: "run-" + Math.random().toString(36).substring(7),
     query,
