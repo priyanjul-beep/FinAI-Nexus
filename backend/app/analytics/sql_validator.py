@@ -36,7 +36,8 @@ class SQLValidator:
         # Check forbidden keywords
         for kw in FORBIDDEN_SQL_KEYWORDS:
             if re.search(kw, sql_upper):
-                raise SQLValidationException(f"Forbidden SQL operation detected: {kw.replace(r'\b', '')}")
+                kw_name = kw.replace(r"\b", "")
+                raise SQLValidationException(f"Forbidden SQL operation detected: {kw_name}")
 
         # Enforce ROW LIMIT if not present
         if "LIMIT" not in sql_upper:

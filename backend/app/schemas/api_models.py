@@ -1,5 +1,5 @@
 from typing import List, Dict, Any, Optional
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 
@@ -19,7 +19,7 @@ class LoginRequest(BaseModel):
 
 
 class UserCreate(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: str
     role: str = "ANALYST"  # ADMIN, ANALYST, VIEWER
@@ -103,7 +103,7 @@ class DocumentOut(BaseModel):
     file_size: int
     status: str
     total_pages: int
-    metadata: Dict[str, Any] = {}
+    metadata_json: Dict[str, Any] = {}
     created_at: datetime
 
     class Config:
