@@ -173,9 +173,3 @@ The system includes 8 pre-configured demo scenarios:
 - [Platform Security & Auth](docs/security.md)
 - [API Documentation](docs/api.md)
 - [AWS Cloud Deployment Guide](docs/aws-deployment.md)
-
----
-
-## 9. License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
